@@ -66,7 +66,7 @@ if submit:
     st.subheader('The Query is')
     print((response))
 
-    data = read_sql_query(response, "student.db")
+    data = read_sql_query(response, "../databse/student.db")
 
     st.subheader('The Response is')
 

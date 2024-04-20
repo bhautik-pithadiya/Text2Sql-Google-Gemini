@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>File Upload</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+    }
+    .upload-btn {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .upload-btn:hover {
+        background-color: #45a049;
+    }
+    input[type="file"] {
+        display: none;
+    }
+    .upload-label {
+        display: inline-block;
+        background-color: #f0f0f0;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .upload-label:hover {
+        background-color: #ddd;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Upload File</h2>
+    <label for="file-upload" class="upload-label">Choose File</label>
+    <input type="file" id="file-upload">
+    <button class="upload-btn" onclick="uploadFile()">Upload</button>
+    <p id="upload-message"></p>
+</div>
+
+<script>
+    function uploadFile() {
+        var fileInput = document.getElementById("file-upload");
+        var file = fileInput.files[0];
+        var formData = new FormData();
+        formData.append("file", file);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/upload/", true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    document.getElementById("upload-message").innerText = "File uploaded successfully: " + response.filename;
+                    window.location.href = "text2sql";
+                } else {
+                    document.getElementById("upload-message").innerText = "Error uploading file: " + xhr.responseText;
+                }
+            }
+        };
+        xhr.send(formData);
+    }
+</script>
+
+</body>
+</html>

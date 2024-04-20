@@ -2,11 +2,11 @@ from dotenv import load_dotenv
 
 load_dotenv() ## load all the environment variables 
 
-import streamlit as st
+import streamlit as st # type: ignore
 import os
 import sqlite3
 
-import google.generativeai as genai
+import google.generativeai as genai # type: ignore
 
 ## Configure our API key
 genai.configure(api_key = os.getenv("GOOGLE_API_KEY"))
@@ -29,8 +29,8 @@ def read_sql_query(sql,db):
     conn.commit()
     conn.close()
 
-    for row in rows:
-        print(row)
+    # for row in rows:
+    #     print(row)
 
     return rows
 
@@ -45,7 +45,7 @@ prompt = [
     SELECT COUNT(*) FROM STUDENT ;
     \nExample 2 - Tell me all the students studying  in Data Science class?,
     the SQL command will be something like this SELECT * FROM STUDENT where CLASS = "DATA Science";
-    also the sql code should not have ``` in beginning or end and sql wird in output 
+    also the sql code should not have this ``` in beginning or at the end, sql word should not be in output and Just give sql command for the given question.
 """
 ]
 
@@ -65,11 +65,20 @@ if submit:
 
     st.subheader('The Query is')
     print((response))
+    st.code(response)
 
     data = read_sql_query(response, "student.db")
 
     st.subheader('The Response is')
 
     for row in data:
-        print(row)
-        st.header(row)
+        
+        if len(row) > 1:
+            output = ''
+            for i in row:
+                output+=str(i)+' '
+            print(output)
+            st.text(output)
+        else:
+            print(row[0])
+            st.text(row[0])

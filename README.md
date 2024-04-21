@@ -26,3 +26,4 @@ source tfod/bin/activate # Linux
     streamlit run app.py
 
 ## Demo
+![Video Name](images/demo.webm)
